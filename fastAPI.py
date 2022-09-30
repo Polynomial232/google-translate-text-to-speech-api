@@ -13,7 +13,7 @@ async def index():
     return 0
 
 @app.get('/TextToVoice')
-async def response(text:str = None):
+async def response(text:str = None, format:str = 'mp3'):
     if(text == None):
         return {
             "detail": {
@@ -21,9 +21,9 @@ async def response(text:str = None):
                 "text": "None"
             }
         }
-    audio_file= synthesize_text(text)
+    audio_file= synthesize_text(text, format)
     file_path = os.path.join(audio_file)
-    return FileResponse(file_path, media_type='mp3', filename=audio_file)
+    return FileResponse(file_path, media_type=format, filename=audio_file)
 
 @app.get('/FileToVoice')
 async def response(file:UploadFile = File(...)):

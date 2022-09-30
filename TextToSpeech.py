@@ -1,13 +1,11 @@
-def synthesize_text(text):
+def synthesize_text(text, format):
+    print(format)
     from gtts import gTTS
     import time
 
     seconds = time.time()
     tts = gTTS(text, lang='id')
-    audio_file = './audio/'+str(seconds)+'.mp3'
+    audio_file = './audio/'+str(seconds)+'.'+str(format)
     tts.save(audio_file)
-    
-    # from playsound import playsound
-    # playsound(audio_file)
 
     return audio_file
