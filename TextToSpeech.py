@@ -2,10 +2,17 @@ def synthesize_text(text, format):
     print(format)
     from gtts import gTTS
     import time
+    import librosa
+    import soundfile as sf
+    import audio_metadata
 
     seconds = time.time()
     tts = gTTS(text, lang='id')
-    audio_file = './audio/'+str(seconds)+'.'+str(format)
+    audio_file = './audio/'+str(seconds)+'.wav'
     tts.save(audio_file)
+    x,_ = librosa.load(audio_file, sr=8000)
+    sf.write(audio_file, x, 8000)
+    metadata = audio_metadata.load(audio_file)
+    print(metadata)
 
     return audio_file
