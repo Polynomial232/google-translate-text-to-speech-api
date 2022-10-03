@@ -1,5 +1,4 @@
-def synthesize_text(text, format):
-    print(format)
+def synthesize_text(text):
     from gtts import gTTS
     import time
     import librosa
