@@ -1,4 +1,4 @@
-from fastapi import FastAPI, UploadFile, File
+from fastapi import FastAPI, UploadFile, File, HTTPException, status
 from fastapi.responses import FileResponse
 from TextToSpeech import synthesize_text
 from FileToSpeech import FileToSpeech
@@ -13,56 +13,35 @@ app = FastAPI()
 async def index():
     return 0
 
-@app.get('/TextToVoice')
+@app.get('/text-to-voice')
 async def response(text:str = None):
     if(text == None):
-        return {
-            "detail": {
-                "status": 400,
-                "text": "None"
-            }
-        }
+        raise HTTPException(status_code=400)
     audio_file = synthesize_text(text)
     file_path = os.path.join(audio_file)
     return FileResponse(file_path, media_type='wav', filename=audio_file)
 
-@app.get('/OTPVoice')
+@app.get('/otp-voice')
 async def response(text:str = None):
     if(text == None):
-        return {
-            "detail": {
-                "status": 400,
-                "text": "None"
-            }
-        }
-    audio_file = OTPSpeech(text)
+        raise HTTPException(status_code=400)
+    audio_file = await OTPSpeech(text)
     file_path = os.path.join(audio_file)
     return FileResponse(file_path, media_type='wav', filename=audio_file)
 
-@app.get('/FileToVoice')
+@app.get('/file-to-voice')
 async def response(file:UploadFile = File(...)):
     if not file.content_type.startswith("text"):
-        return {
-            "detail": {
-                "status": 400,
-                "file": "File Is Not txt"
-            }
-        }
+        raise HTTPException(status_code=400)
     audio_file = await FileToSpeech(file)
     file_path = os.path.join(audio_file)
     return FileResponse(file_path, media_type='wav', filename=audio_file)
 
-@app.get('/OTPFileToVoice')
+@app.get('/otp-file-to-voice')
 async def response(file:UploadFile = File(...)):
     if not file.content_type.startswith("text"):
-        return {
-            "detail": {
-                "status": 400,
-                "file": "File Is Not txt"
-            }
-        }
+        raise HTTPException(status_code=400)
     audio_file = await OTPFileToSpeech(file)
-    return file
     file_path = os.path.join(audio_file)
     return FileResponse(file_path, media_type='wav', filename=audio_file)
 

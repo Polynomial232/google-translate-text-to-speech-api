@@ -4,7 +4,6 @@ def synthesize_text(text):
     import librosa
     import soundfile as sf
     import audio_metadata
-    # from playsound import playsound
 
     seconds = time.time()
     tts = gTTS(text, lang='id')
@@ -13,7 +12,5 @@ def synthesize_text(text):
     x,_ = librosa.load(audio_file, sr=8000)
     sf.write(audio_file, x, 8000)
     metadata = audio_metadata.load(audio_file)
-    # playsound(audio_file)
-    print(metadata)
 
     return audio_file
